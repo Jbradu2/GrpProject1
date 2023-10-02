@@ -1,7 +1,6 @@
 //global variables
 var apiKey = 'apiKey=2e2817cf7b4646899c0dd85ef8464be1';
 var apiUrl = 'https://api.spoonacular.com/recipes/complexSearch?'
-var fetchUrl = apiUrl + apiKey +"&query" + inputText;
 var searchInput = $('#enterFood');
 var results = $('#results-div');
 var inputText;
@@ -9,20 +8,31 @@ var inputText;
 
 
 function search(){
-
-  if(searchInput).value !== "") {
-inputText =searchInput.value;
-  }
-  else{
-    response.Text.textContent = "Errorr Response: No such food";
-  }
-  fetch(fetchUrl)
+  
+  if(searchInput.val() !== ""){
+    inputText =searchInput.val();
+    //consrturct URL with the input text from user
+    var fetchUrl = apiUrl + apiKey +"&query" + inputText;
+    fetch(fetchUrl)
     .then(function (response) {
       if (!response.ok) {
-        response.Text.textContent = "Errorr Response: " + response.status;
+        // Update the error message in results div
+        results.text("Error Response: " + response.status);
+      } else {
+        return response.json();
       }
-      return response.json();
-      //stingify Response?
+    })
+    .then(function (data) {
+      // Handle the JSON response data here
+      // You can update the results div with the data
+      console.log(data);
+    })
+    .catch(function (error) {
+      // Handle any other errors that may occur during the fetch
+      console.error("Fetch error:", error);
     });
-};
-
+} else {
+  // Update the error message in results div
+  results.text("Error Response: No such food");
+}
+}
