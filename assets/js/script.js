@@ -109,7 +109,7 @@ function displayRecipeInformation(recipeInfo) {
     var image = $('<img>').attr('src', recipeInfo.image);
     recipeDiv.append(image);
   }
-  // Display other recipe information here (e.g., ingredients, nutrition, etc.)
+  // Display other recipe information here ingredients, nutrition, etc.) on new webpage
   var ingredientsList = $('<ul>');
   recipeInfo.extendedIngredients.forEach(function (ingredient) {
     var ingredientItem = $('<li>').text(ingredient.originalString);
