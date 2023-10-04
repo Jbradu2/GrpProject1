@@ -1,6 +1,7 @@
+$(document).ready(function () {
 //global variables
 var apiKey = '?apiKey=2e2817cf7b4646899c0dd85ef8464be1';
-var apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
+var apiUrl = 'https://api.spoonacular.com/recipes/';
 var searchInput = $('#enterFood');
 var results = $('#results-div');
 var inputText;
@@ -12,7 +13,8 @@ function search(){
   if(searchInput.val() !== ""){
     inputText =searchInput.val();
     //consrturct variable for URL with the input text from user
-var fetchUrl = apiUrl + apiKey +"&query=" + inputText;
+var fetchUrl = apiUrl + "complexSearch" + apiKey +"&query=" + inputText;
+//fetch data from Spoonacular
     fetch(fetchUrl)
     .then(function (response) {
       if (!response.ok) {
@@ -54,6 +56,7 @@ function displayResults(recipeResults) {
 
   // Loop through the recipe results and display them
   recipeResults.forEach(function (recipe) {
+   //Crteate space for title and image
     var recipeDiv = $('<div class="recipe">');
     var title = $('<h2>').text(recipe.title);
 
@@ -63,12 +66,62 @@ function displayResults(recipeResults) {
       recipeDiv.append(image);
     }
 
-
-    recipeDiv.append(title);
+    var link = $('<a>').attr('href', '#').attr('data-id', recipe.id).text('View Recipe');
+    recipeDiv.append(title, link);
+    //make another event listener for link, must be on click.
+    //need to figure out how to add recipe... doesnt appear in array...
+    //add to DOM
+    var link = $('<a>').attr('href', recipe.sourceUrl).attr('target', '_blank').text('View Recipe');
+    recipeDiv.append(title, link);
+    
     results.append(recipeDiv);
   });
-
+  results.find('a[data-id]').on('click', function () {
+    var recipeId = $(this).data('id');
+    getRecipeInformation(recipeId);
+  });  
 }
+function getRecipeInformation(recipeId) {
+  var recipeInfoUrl = apiUrl + recipeId + '/information' + apiKey + '&includeNutrition=true';
+
+  fetch(recipeInfoUrl)
+    .then(function (response) {
+      if (!response.ok) {
+        results.html("Error Response: " + response.status);
+      } else {
+        return response.json();
+      }
+    })
+    .then(function (data) {
+      console.log(data)
+      displayRecipeInformation(data);
+    })
+    .catch(function (error) {
+      results.html("Error: " + error.message);
+    });
+}
+function displayRecipeInformation(recipeInfo) {
+  results.html('');
+  var recipeDiv = $('<div class="recipe">');
+  var title = $('<h2>').text(recipeInfo.title);
+
+  if (recipeInfo.image) {
+    var image = $('<img>').attr('src', recipeInfo.image);
+    recipeDiv.append(image);
+  }
+  // Display other recipe information here (e.g., ingredients, nutrition, etc.)
+  var ingredientsList = $('<ul>');
+  recipeInfo.extendedIngredients.forEach(function (ingredient) {
+    var ingredientItem = $('<li>').text(ingredient.originalString);
+    ingredientsList.append(ingredientItem);
+  });
+
+  var instructions = $('<div>').html(recipeInfo.instructions);
+
+  recipeDiv.append(title, ingredientsList, instructions);
+  results.append(recipeDiv);
+}
+});
 //given a recipie dashboard with form inputs
 //when i search for a food item
 //then i am presented with image and link to that item with picture
