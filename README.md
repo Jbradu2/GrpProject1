@@ -5,6 +5,9 @@
 
 # Link
 
+### Github Pages Link: https://jbradu2.github.io/GrpProject1/
+
+### Github Repo Link: https://github.com/Jbradu2/GrpProject1
 
 
 
