@@ -12,3 +12,5 @@
 
 
 # Mock-up
+
+![group project 1 picture](https://github.com/Jbradu2/GrpProject1/assets/141682993/f1cefe3a-2a61-4a3a-97d5-9a0a644f869f)
