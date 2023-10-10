@@ -68,8 +68,7 @@ function displayResults(recipeResults) {
 
     var link = $('<a>').attr('href', '#').attr('data-id', recipe.id).text('View Recipe');
     recipeDiv.append(title, link);
-    //make another event listener for link, must be on click.
-    //need to figure out how to add recipe... doesnt appear in array...
+
     //add to DOM
 
     results.append(recipeDiv);
@@ -120,6 +119,3 @@ function displayRecipeInformation(recipeInfo) {
   results.append(recipeDiv);
 }
 });
-//given a recipie dashboard with form inputs
-//when i search for a food item
-//then i am presented with image and link to that item with picture
